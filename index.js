@@ -7,12 +7,16 @@ var List = require("collections/list");
 const { listenerCount } = require('node:process');
 require('dotenv').config();
 
-
 //Load env variables
 const token = process.env.DISCORD_TOKEN;
+var player_count = process.env.PLAYER_COUNT;
 
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+
+//Init config
+client.appconf = new Object();
+client.appconf["player_count"] = player_count;
 
 //Load required commands and db
 client.db =new Keyv('sqlite://db.sqlite');
@@ -21,21 +25,21 @@ client.db.on('error', err => console.error('Keyv connection error:', err));
 client.commands = new Collection()
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
-
-//Load current PUG queue in case the BOT died
-var queue;
+var map;
+//Init sqlite
 (async () => {
 	var result = await client.db.get("queue");
-
 	if(!result) {
-		await client.db.set("queue",JSON.stringify(""));
+		await client.db.set("queue",new Map().toJSON());
 	} else {
-		queue = new List(result);
+		map = new Map(result);
 	}
+	console.log("Initialized sqlite");
 })();
 
 //Require all commandfiles
 for (const file of commandFiles) {
+	console.log(`Loading command ${file}`);
 	const filePath = path.join(commandsPath, file);
 	const command = require(filePath);
 	client.commands.set(command.data.name, command);

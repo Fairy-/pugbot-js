@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-var List = require("collections/list");
+var Map = require("collections/map");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -9,14 +9,14 @@ module.exports = {
         let db = interaction.client.db;
 
 		//Load current PUG queue
-		var list = new List(await db.get("queue"));
+		var map = new Map(await db.get("queue"));
 		console.log("Loaded current PUG queue from db.");
         var playerlist;
-        if (list.length === 0) {
+        if (map.length === 0) {
             playerlist = "";
         } else {
-            playerlist = `\n${list.join('\n')}`;
+            playerlist = `\n${Array.from(map.values()).join('\n')}`;
         }
-        await interaction.reply(`There are currently ${list.length} players in the queue.${playerlist}`);
+        await interaction.reply(`There are currently ${map.length} players in the queue.${playerlist}`);
 	},
 };
