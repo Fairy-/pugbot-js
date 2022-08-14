@@ -25,6 +25,7 @@ client.db.on('error', err => console.error('Keyv connection error:', err));
 client.commands = new Collection()
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+
 var map;
 //Init sqlite
 (async () => {
@@ -33,6 +34,13 @@ var map;
 		await client.db.set("queue",new Map().toJSON());
 	} else {
 		map = new Map(result);
+	}
+
+	result = await client.db.get("player_count");
+	if(!result) {
+		await client.db.set("player_count",player_count);
+	} else {
+		player_count = result;
 	}
 	console.log("Initialized sqlite");
 })();
@@ -48,6 +56,9 @@ for (const file of commandFiles) {
 
 // When the client is ready, run this code (only once)
 client.once('ready', () => {
+	client.user.setPresence({ 
+		activities: [{ name: `for ${player_count - map.length} more players.`, type: 3}] 
+	});
 	console.log('Ready!');
 });
 

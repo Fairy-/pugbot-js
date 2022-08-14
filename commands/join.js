@@ -35,7 +35,9 @@ module.exports = {
 			await interaction.reply(`${player_count} players have assembled!\n${playerstring}`);
 			return;
 		}
-
+		interaction.client.user.setPresence({ 
+			activities: [{ name: `for ${player_count - map.length} more players.`, type: 3}] 
+		});
 		await interaction.reply(`${interaction.user.tag} joined the PUG queue.`);
 	},
 };

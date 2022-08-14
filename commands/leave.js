@@ -24,6 +24,9 @@ module.exports = {
 		await db.set("queue",map.toJSON());
 		
 		console.log(`Removed user ${interaction.user.tag} from PUG queue.`);
+		interaction.client.user.setPresence({ 
+			activities: [{ name: `for ${player_count - map.length} more players.`, type: 3}] 
+		});
 		await interaction.reply(`${interaction.user.tag} left the PUG queue.`);
 	},
 };
