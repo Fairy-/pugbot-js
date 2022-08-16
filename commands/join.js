@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 var Map = require("collections/map");
 var List = require("collections/list");
+const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -36,8 +37,8 @@ module.exports = {
 			return;
 		}
 		interaction.client.user.setPresence({ 
-			activities: [{ name: `for ${player_count - map.length} more players.`, type: 3}] 
+			activities: [{ name: `for ${clamp(player_count - map.length,0,player_count)} more players.`, type: 3}] 
 		});
-		await interaction.reply(`${interaction.user.tag} joined the PUG queue.`);
+		await interaction.reply(`${interaction.user.tag} joined the PUG queue. (${clamp(map.length,0,player_count)} / ${player_count}) `);
 	},
 };
