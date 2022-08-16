@@ -19,7 +19,7 @@ client.appconf = new Object();
 client.appconf["player_count"] = player_count;
 
 //Load required commands and db
-client.db =new Keyv('sqlite://db.sqlite');
+client.db =new Keyv('sqlite://data/db.sqlite');
 client.db.on('error', err => console.error('Keyv connection error:', err));
 
 client.commands = new Collection()

@@ -5,7 +5,6 @@ const path = require('node:path');
 require('dotenv').config();
 
 const token = process.env.DISCORD_TOKEN;
-const guildId = process.env.GUILD_ID;
 const clientId = process.env.CLIENT_ID;
 
 const commands = [];
@@ -20,6 +19,6 @@ for (const file of commandFiles) {
 
 const rest = new REST({ version: '10' }).setToken(token);
 
-rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands })
+rest.put(Routes.applicationCommands(clientId), { body: commands })
 	.then(() => console.log('Successfully registered application commands.'))
 	.catch(console.error);
