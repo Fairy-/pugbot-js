@@ -26,14 +26,14 @@ client.commands = new Collection()
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
-var map;
+var list;
 //Init sqlite
 (async () => {
 	var result = await client.db.get("queue");
 	if(!result) {
-		await client.db.set("queue",new Map().toJSON());
+		await client.db.set("queue",new List().toJSON());
 	} else {
-		map = new Map(result);
+		list = new List(result);
 	}
 
 	result = await client.db.get("player_count");
@@ -57,7 +57,7 @@ for (const file of commandFiles) {
 // When the client is ready, run this code (only once)
 client.once('ready', () => {
 	client.user.setPresence({ 
-		activities: [{ name: `for ${player_count - map.length} more players.`, type: 3}] 
+		activities: [{ name: `for ${player_count - list.length} more players.`, type: 3}] 
 	});
 	console.log('Ready!');
 });
