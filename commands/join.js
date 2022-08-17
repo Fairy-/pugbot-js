@@ -1,12 +1,12 @@
 const { SlashCommandBuilder } = require('discord.js');
-var Map = require("collections/map");
-var List = require("collections/list");
+var Player = require("../module/player.js");
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('join')
-		.setDescription('Join the PUG queue.'),
+		.setDescription('Join the PUG queue.')
+		.setDMPermission(false),
 	async execute(interaction) {
 		let db = interaction.client.db;
 		let player_count = interaction.client.appconf["player_count"];
@@ -23,11 +23,12 @@ module.exports = {
 		} 
 
 		//Add player to queue
-		map.add(interaction.user.tag,interaction.user.id);
 
+		map.add(new Player(interaction.user.tag,interaction.user.id),interaction.user.id);
+		
 		await db.set("queue",map.toJSON());
 		console.log(`Added user ${interaction.user.tag} to PUG queue.`);
-		if (map.length === player_count) {
+		if (map.length == player_count) {
 
 			var playerstring = "";
 			for (var item of map.keys()) {
