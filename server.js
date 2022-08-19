@@ -3,7 +3,7 @@ const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const fs = require('node:fs');
 const path = require('node:path');
 const Keyv = require('keyv');
-var Map = require("collections/Map");
+var Map = require("collections/map");
 const { listenerCount } = require('node:process');
 const { resourceLimits } = require('node:worker_threads');
 require('dotenv').config();
@@ -106,6 +106,9 @@ async function queueCleanup() {
 				});
 			}
 		}
+		client.user.setPresence({ 
+			activities: [{ name: `for ${player_count - newresult.length} more players.`, type: 3}] 
+		});
 		await client.db.set("queue",newresult.toJSON());
 	}
 	setTimeout(queueCleanup, 1000*60);
