@@ -12,6 +12,9 @@ module.exports = {
 		await db.set("queue",new Map().toJSON());
 
 		console.log("Cleared current PUG queue.");
+		client.user.setPresence({ 
+			activities: [{ name: `for ${player_count} more players.`, type: 3}] 
+		});
         await interaction.reply(`Cleared the PUG queue.`);
 	},
 };

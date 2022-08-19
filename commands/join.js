@@ -24,7 +24,7 @@ module.exports = {
 
 		//Add player to queue
 
-		map.add(new Player(interaction.user.tag,interaction.user.id),interaction.user.id);
+		map.add(new Player(interaction.user.username,interaction.user.id),interaction.user.id);
 		
 		await db.set("queue",map.toJSON());
 		console.log(`Added user ${interaction.user.tag} to PUG queue.`);
@@ -35,6 +35,9 @@ module.exports = {
 				playerstring += `<@${item}>\n`
 			}
 			await interaction.reply(`${player_count} players have assembled!\n${playerstring}`);
+			interaction.client.user.setPresence({ 
+				activities: [{ name: `for ${clamp(player_count - map.length,0,player_count)} more players.`, type: 3}] 
+			});
 			return;
 		}
 		interaction.client.user.setPresence({ 
