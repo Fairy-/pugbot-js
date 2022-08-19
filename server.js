@@ -63,7 +63,7 @@ for (const file of commandFiles) {
 // When the client is ready, run this code (only once)
 client.once('ready', () => {
 	client.user.setPresence({ 
-		activities: [{ name: `for ${player_count - map.length} more players.`, type: 3}] 
+		activities: [{ name: `for ${clamp(player_count - map.length,0,player_count)} more players.`, type: 3}] 
 	});
 	console.log('Ready!');
 	queueCleanup();
@@ -107,7 +107,7 @@ async function queueCleanup() {
 			}
 		}
 		client.user.setPresence({ 
-			activities: [{ name: `for ${player_count - newresult.length} more players.`, type: 3}] 
+			activities: [{ name: `for ${clamp(player_count - map.length,0,player_count)} more players.`, type: 3}] 
 		});
 		await client.db.set("queue",newresult.toJSON());
 	}
