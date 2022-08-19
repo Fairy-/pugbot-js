@@ -28,6 +28,6 @@ module.exports = {
 		interaction.client.user.setPresence({ 
 			activities: [{ name: `for ${clamp(player_count - map.length,0,player_count)} more players.`, type: 3}] 
 		});
-		await interaction.reply(`${interaction.user.tag} left the PUG queue. (${clamp(map.length,0,player_count)} / ${player_count})`);
+		await interaction.reply(`${interaction.user.username} left the PUG queue. (${clamp(map.length,0,player_count)} / ${player_count})`);
 	},
 };
