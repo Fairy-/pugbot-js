@@ -97,12 +97,8 @@ async function queueCleanup() {
 			if((Date.now() - timeout) > player.createtimestamp) {
 				console.log(`Removing ${player.name} from the queue due to inactivity.`);
 				await client.users.fetch(player.id).then((user) => {
-					try {
-						user.send("Removing you from the PUG queue due to inactivity.").catch(console.log("Can't send DM to user. Skipping."));
+						user.send("Removing you from the PUG queue due to inactivity.").catch(console.log(`Can't send DM to user ${player.name}. Skipping.`));
 						newresult.delete(player.id);
-					} catch (err){
-						console.log("err");
-					}
 				});
 			}
 		}
