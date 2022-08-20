@@ -103,7 +103,7 @@ async function queueCleanup() {
 			}
 		}
 		client.user.setPresence({ 
-			activities: [{ name: `for ${clamp(player_count - map.length,0,player_count)} more players.`, type: 3}] 
+			activities: [{ name: `for ${clamp(player_count - newresult.length,0,player_count)} more players.`, type: 3}] 
 		});
 		await client.db.set("queue",newresult.toJSON());
 	}
