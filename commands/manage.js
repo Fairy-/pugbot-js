@@ -42,7 +42,7 @@ module.exports = {
                 await db.set("queue",map.toJSON());
                 console.log(`${interaction.user.username} removed ${user.username} from the queue.`);
                 interaction.client.user.setPresence({ 
-                    activities: [{ name: `for ${clamp(new_player_count - map.length,0,new_player_count)} more players.`, type: 3}] 
+                    activities: [{ name: `for ${clamp(player_count - map.length,0,player_count)} more players.`, type: 3}] 
                 });
                 await interaction.reply(`${interaction.user.username} removed ${user.username} from the PUG queue. (${clamp(map.length,0,player_count)} / ${player_count}) `);
             }
