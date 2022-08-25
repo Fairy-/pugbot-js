@@ -1,5 +1,4 @@
 const { SlashCommandBuilder } = require('discord.js');
-const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -8,6 +7,7 @@ module.exports = {
 		.setDMPermission(false),
 	async execute(interaction) {
 		let db = interaction.client.db;
+		let helper = interaction.client.helper;
 		let player_count = interaction.client.appconf["player_count"];
 
 		//Load current PUG queue
@@ -25,9 +25,7 @@ module.exports = {
 		await db.set("queue",map.toJSON());
 		
 		console.log(`Removed user ${interaction.user.tag} from PUG queue.`);
-		interaction.client.user.setPresence({ 
-			activities: [{ name: `for ${clamp(player_count - map.length,0,player_count)} more players.`, type: 3}] 
-		});
-		await interaction.reply(`${interaction.user.username} left the PUG queue. (${clamp(map.length,0,player_count)} / ${player_count})`);
+		helper.setBotPresence(interaction.client, map.length);
+		await interaction.reply(`${interaction.user.username} left the PUG queue. (${helper.clamp(map.length,0,player_count)} / ${player_count})`);
 	},
 };

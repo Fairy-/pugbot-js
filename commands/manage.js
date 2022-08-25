@@ -27,6 +27,7 @@ module.exports = {
                     .setRequired(true)))),
 	async execute(interaction) {
         let db = interaction.client.db;
+        let helper = interaction.client.helper;
         let player_count = interaction.client.appconf["player_count"];
 
         if(interaction.options.getSubcommandGroup() === 'queue') {
@@ -41,10 +42,8 @@ module.exports = {
 
                 await db.set("queue",map.toJSON());
                 console.log(`${interaction.user.username} removed ${user.username} from the queue.`);
-                interaction.client.user.setPresence({ 
-                    activities: [{ name: `for ${clamp(player_count - map.length,0,player_count)} more players.`, type: 3}] 
-                });
-                await interaction.reply(`${interaction.user.username} removed ${user.username} from the PUG queue. (${clamp(map.length,0,player_count)} / ${player_count}) `);
+                helper.setBotPresence(interaction.client, map.length);
+                await interaction.reply(`${interaction.user.username} removed ${user.username} from the PUG queue. (${helper.clamp(map.length,0,player_count)} / ${player_count}) `);
             }
         }
 
@@ -54,9 +53,7 @@ module.exports = {
                 interaction.client.appconf["player_count"] = new_player_count;
                 
                 var map = new Map(await db.get("queue"));
-                interaction.client.user.setPresence({ 
-                    activities: [{ name: `for ${clamp(new_player_count - map.length,0,new_player_count)} more players.`, type: 3}] 
-                });
+                helper.setBotPresence(interaction.client, map.length);
 
                 console.log(`${interaction.user.username} set the playqueue to ${new_player_count}`);
                 await db.set("player_count",new_player_count);

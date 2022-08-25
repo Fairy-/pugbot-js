@@ -3,6 +3,7 @@ const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const fs = require('node:fs');
 const path = require('node:path');
 const Keyv = require('keyv');
+const Helper = require('./module/helper.js')
 var Map = require("collections/map");
 const { listenerCount } = require('node:process');
 const { resourceLimits } = require('node:worker_threads');
@@ -22,6 +23,7 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 //Init config
 client.appconf = new Object();
+client.helper = Helper;
 client.appconf["player_count"] = player_count;
 
 //Load required commands and dbDate.now()
@@ -102,9 +104,7 @@ async function queueCleanup() {
 				newresult.delete(player.id);
 			}
 		}
-		client.user.setPresence({ 
-			activities: [{ name: `for ${clamp(player_count - newresult.length,0,player_count)} more players.`, type: 3}] 
-		});
+		client.helper.setBotPresence(client, newresult.length);
 		await client.db.set("queue",newresult.toJSON());
 	}
 	setTimeout(queueCleanup, 1000*60);
