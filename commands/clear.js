@@ -7,6 +7,7 @@ module.exports = {
         .setDMPermission(false),
 	async execute(interaction) {
         let db = interaction.client.db;
+		let player_count = interaction.client.appconf["player_count"];
 
 		//Load current PUG queue
 		await db.set("queue",new Map().toJSON());
